@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d4fee2d945564ec7bd3dc23b5eeb6ea4" Name="Diagram1" ZoomLevel="68">
+        <EntityTypeShape EntityType="BikeStoreModel.Category" Width="1.5" PointX="3.625" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoreModel.Manufacturer" Width="1.5" PointX="3.625" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoreModel.Model" Width="1.5" PointX="0.5" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoreModel.PartNumber" Width="1.5" PointX="0.5" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BikeStoreModel.Status" Width="1.5" PointX="3.625" PointY="5.5" IsExpanded="true" />
+        <AssociationConnector Association="BikeStoreModel.ModelCategoryForeignKey" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoreModel.ModelManufacturerForeignKey" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoreModel.ModelStatusForeignKey" ManuallyRouted="true" >
+          <ConnectorPoint PointX="3.625" PointY="5.5" />
+          <ConnectorPoint PointX="3.25" PointY="5.125" />
+          <ConnectorPoint PointX="3.25" PointY="5.3854748840144229" />
+          <ConnectorPoint PointX="2.375" PointY="5.3854748840144229" />
+          <ConnectorPoint PointX="2" PointY="4.9790502319711534" />
+        </AssociationConnector>
+        <AssociationConnector Association="BikeStoreModel.PartNumberModelForeignKey" ManuallyRouted="false" />
+        <AssociationConnector Association="BikeStoreModel.PartNumberStatusForeignKey" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
