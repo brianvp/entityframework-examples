@@ -1,0 +1,802 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BikeStoreModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="CustomDataFields" Type="nvarchar(max)" />
+          <Property Name="DateModified" Type="datetime2" Precision="7" />
+          <Property Name="DateCreated" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="Manufacturer">
+          <Key>
+            <PropertyRef Name="ManufacturerId" />
+          </Key>
+          <Property Name="ManufacturerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="CustomDataFields" Type="nvarchar(max)" />
+          <Property Name="DateModified" Type="datetime2" Precision="7" />
+          <Property Name="DateCreated" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="Model">
+          <Key>
+            <PropertyRef Name="ModelId" />
+          </Key>
+          <Property Name="ModelId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="ManufacturerCode" Type="nvarchar" MaxLength="25" />
+          <Property Name="CategoryId" Type="int" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="Features" Type="nvarchar(max)" />
+          <Property Name="StatusId" Type="int" />
+          <Property Name="ManufacturerId" Type="int" />
+          <Property Name="ListPrice" Type="money" />
+          <Property Name="ImageCollection" Type="nvarchar(max)" />
+          <Property Name="CategoryCustomData" Type="nvarchar(max)" />
+          <Property Name="ManufacturerCustomData" Type="nvarchar(max)" />
+          <Property Name="DateModified" Type="datetime2" Precision="7" />
+          <Property Name="DateCreated" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="PartNumber">
+          <Key>
+            <PropertyRef Name="PartNumberId" />
+          </Key>
+          <Property Name="PartNumberId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="InvoiceDescription" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModelId" Type="int" />
+          <Property Name="StatusId" Type="int" />
+          <Property Name="InventoryPartNumber" Type="nvarchar" MaxLength="25" />
+          <Property Name="ManufacturerPartNumber" Type="nvarchar" MaxLength="25" />
+          <Property Name="CategoryCustomData" Type="nvarchar(max)" />
+          <Property Name="ManufacturerCustomData" Type="nvarchar(max)" />
+          <Property Name="ListPrice" Type="money" />
+          <Property Name="Cost" Type="money" />
+          <Property Name="UPC" Type="nchar" MaxLength="12" />
+          <Property Name="DateModified" Type="datetime2" Precision="7" />
+          <Property Name="DateCreated" Type="datetime2" Precision="7" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="StatusId" />
+          </Key>
+          <Property Name="StatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateModified" Type="datetime2" Precision="7" />
+          <Property Name="DateCreated" Type="datetime2" Precision="7" />
+        </EntityType>
+        <Association Name="ModelCategoryForeignKey">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Model" Type="Self.Model" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Model">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ModelManufacturerForeignKey">
+          <End Role="Manufacturer" Type="Self.Manufacturer" Multiplicity="0..1" />
+          <End Role="Model" Type="Self.Model" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manufacturer">
+              <PropertyRef Name="ManufacturerId" />
+            </Principal>
+            <Dependent Role="Model">
+              <PropertyRef Name="ManufacturerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ModelStatusForeignKey">
+          <End Role="Status" Type="Self.Status" Multiplicity="0..1" />
+          <End Role="Model" Type="Self.Model" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="StatusId" />
+            </Principal>
+            <Dependent Role="Model">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PartNumberModelForeignKey">
+          <End Role="Model" Type="Self.Model" Multiplicity="0..1" />
+          <End Role="PartNumber" Type="Self.PartNumber" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Model">
+              <PropertyRef Name="ModelId" />
+            </Principal>
+            <Dependent Role="PartNumber">
+              <PropertyRef Name="ModelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PartNumberStatusForeignKey">
+          <End Role="Status" Type="Self.Status" Multiplicity="0..1" />
+          <End Role="PartNumber" Type="Self.PartNumber" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="StatusId" />
+            </Principal>
+            <Dependent Role="PartNumber">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="version" Type="int" Mode="In" />
+          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+          <Parameter Name="owner_id" Type="int" Mode="In" />
+          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="ModelDelete" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="product">
+          <Parameter Name="ModelID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ModelInsert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="product">
+          <Parameter Name="ModelId" Type="int" Mode="InOut" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="ManufacturerCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="CategoryId" Type="int" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Features" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="StatusId" Type="int" Mode="In" />
+          <Parameter Name="ManufacturerId" Type="int" Mode="In" />
+          <Parameter Name="ListPrice" Type="money" Mode="In" />
+          <Parameter Name="ImageCollection" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="CategoryCustomData" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ManufacturerCustomData" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="ModelSelectByKey" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="product">
+          <Parameter Name="ModelId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ModelSelectFilter" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="product">
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="ManufacturerCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="CategoryName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Features" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="MinListPrice" Type="money" Mode="In" />
+          <Parameter Name="MaxListPrice" Type="money" Mode="In" />
+          <Parameter Name="StatusName" Type="nvarchar" Mode="In" />
+          <Parameter Name="ManufacturerName" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="ModelUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="product">
+          <Parameter Name="ModelId" Type="int" Mode="In" />
+          <Parameter Name="Name" Type="nvarchar" Mode="In" />
+          <Parameter Name="ManufacturerCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="CategoryId" Type="int" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Features" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="StatusId" Type="int" Mode="In" />
+          <Parameter Name="ManufacturerId" Type="int" Mode="In" />
+          <Parameter Name="ListPrice" Type="money" Mode="In" />
+          <Parameter Name="ImageCollection" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="CategoryCustomData" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="ManufacturerCustomData" Type="nvarchar(max)" Mode="In" />
+        </Function>
+        <Function Name="PartNumberSelectFilter" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="product">
+          <Parameter Name="ModelName" Type="nvarchar" Mode="In" />
+          <Parameter Name="PartNumberName" Type="nvarchar" Mode="In" />
+          <Parameter Name="ManufacturerCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="InventoryPartNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="ManufacturerPartNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="CategoryName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Features" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="MinListPrice" Type="money" Mode="In" />
+          <Parameter Name="MaxListPrice" Type="money" Mode="In" />
+          <Parameter Name="StatusName" Type="nvarchar" Mode="In" />
+          <Parameter Name="ManufacturerName" Type="nvarchar" Mode="In" />
+        </Function>
+        <EntityContainer Name="BikeStoreModelStoreContainer">
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="product" store:Type="Tables" />
+          <EntitySet Name="Manufacturer" EntityType="Self.Manufacturer" Schema="product" store:Type="Tables" />
+          <EntitySet Name="Model" EntityType="Self.Model" Schema="product" store:Type="Tables" />
+          <EntitySet Name="PartNumber" EntityType="Self.PartNumber" Schema="product" store:Type="Tables" />
+          <EntitySet Name="Status" EntityType="Self.Status" Schema="product" store:Type="Tables" />
+          <AssociationSet Name="ModelCategoryForeignKey" Association="Self.ModelCategoryForeignKey">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Model" EntitySet="Model" />
+          </AssociationSet>
+          <AssociationSet Name="ModelManufacturerForeignKey" Association="Self.ModelManufacturerForeignKey">
+            <End Role="Manufacturer" EntitySet="Manufacturer" />
+            <End Role="Model" EntitySet="Model" />
+          </AssociationSet>
+          <AssociationSet Name="ModelStatusForeignKey" Association="Self.ModelStatusForeignKey">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Model" EntitySet="Model" />
+          </AssociationSet>
+          <AssociationSet Name="PartNumberModelForeignKey" Association="Self.PartNumberModelForeignKey">
+            <End Role="Model" EntitySet="Model" />
+            <End Role="PartNumber" EntitySet="PartNumber" />
+          </AssociationSet>
+          <AssociationSet Name="PartNumberStatusForeignKey" Association="Self.PartNumberStatusForeignKey">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="PartNumber" EntitySet="PartNumber" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BikeStoreModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CustomDataFields" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateModified" Type="DateTime" Precision="7" />
+          <Property Name="DateCreated" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Models" Relationship="Self.ModelCategoryForeignKey" FromRole="Category" ToRole="Model" />
+        </EntityType>
+        <EntityType Name="Manufacturer">
+          <Key>
+            <PropertyRef Name="ManufacturerId" />
+          </Key>
+          <Property Name="ManufacturerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CustomDataFields" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateModified" Type="DateTime" Precision="7" />
+          <Property Name="DateCreated" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Models" Relationship="Self.ModelManufacturerForeignKey" FromRole="Manufacturer" ToRole="Model" />
+        </EntityType>
+        <EntityType Name="Model">
+          <Key>
+            <PropertyRef Name="ModelId" />
+          </Key>
+          <Property Name="ModelId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ManufacturerCode" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Features" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="StatusId" Type="Int32" />
+          <Property Name="ManufacturerId" Type="Int32" />
+          <Property Name="ListPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ImageCollection" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryCustomData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ManufacturerCustomData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="DateModified" Type="DateTime" Precision="7" />
+          <Property Name="DateCreated" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Category" Relationship="Self.ModelCategoryForeignKey" FromRole="Model" ToRole="Category" />
+          <NavigationProperty Name="Manufacturer" Relationship="Self.ModelManufacturerForeignKey" FromRole="Model" ToRole="Manufacturer" />
+          <NavigationProperty Name="Status" Relationship="Self.ModelStatusForeignKey" FromRole="Model" ToRole="Status" />
+          <NavigationProperty Name="PartNumbers" Relationship="Self.PartNumberModelForeignKey" FromRole="Model" ToRole="PartNumber" />
+        </EntityType>
+        <EntityType Name="PartNumber">
+          <Key>
+            <PropertyRef Name="PartNumberId" />
+          </Key>
+          <Property Name="PartNumberId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="InvoiceDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModelId" Type="Int32" />
+          <Property Name="StatusId" Type="Int32" />
+          <Property Name="InventoryPartNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="ManufacturerPartNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryCustomData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ManufacturerCustomData" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ListPrice" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="Cost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="UPC" Type="String" MaxLength="12" FixedLength="true" Unicode="true" />
+          <Property Name="DateModified" Type="DateTime" Precision="7" />
+          <Property Name="DateCreated" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Model" Relationship="Self.PartNumberModelForeignKey" FromRole="PartNumber" ToRole="Model" />
+          <NavigationProperty Name="Status" Relationship="Self.PartNumberStatusForeignKey" FromRole="PartNumber" ToRole="Status" />
+        </EntityType>
+        <EntityType Name="Status">
+          <Key>
+            <PropertyRef Name="StatusId" />
+          </Key>
+          <Property Name="StatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateModified" Type="DateTime" Precision="7" />
+          <Property Name="DateCreated" Type="DateTime" Precision="7" />
+          <NavigationProperty Name="Models" Relationship="Self.ModelStatusForeignKey" FromRole="Status" ToRole="Model" />
+          <NavigationProperty Name="PartNumbers" Relationship="Self.PartNumberStatusForeignKey" FromRole="Status" ToRole="PartNumber" />
+        </EntityType>
+        <Association Name="ModelCategoryForeignKey">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Model" Type="Self.Model" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Model">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ModelManufacturerForeignKey">
+          <End Role="Manufacturer" Type="Self.Manufacturer" Multiplicity="0..1" />
+          <End Role="Model" Type="Self.Model" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Manufacturer">
+              <PropertyRef Name="ManufacturerId" />
+            </Principal>
+            <Dependent Role="Model">
+              <PropertyRef Name="ManufacturerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ModelStatusForeignKey">
+          <End Role="Status" Type="Self.Status" Multiplicity="0..1" />
+          <End Role="Model" Type="Self.Model" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="StatusId" />
+            </Principal>
+            <Dependent Role="Model">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PartNumberModelForeignKey">
+          <End Role="Model" Type="Self.Model" Multiplicity="0..1" />
+          <End Role="PartNumber" Type="Self.PartNumber" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Model">
+              <PropertyRef Name="ModelId" />
+            </Principal>
+            <Dependent Role="PartNumber">
+              <PropertyRef Name="ModelId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PartNumberStatusForeignKey">
+          <End Role="Status" Type="Self.Status" Multiplicity="0..1" />
+          <End Role="PartNumber" Type="Self.PartNumber" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Status">
+              <PropertyRef Name="StatusId" />
+            </Principal>
+            <Dependent Role="PartNumber">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BikeStoreEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Categories" EntityType="Self.Category" />
+          <EntitySet Name="Manufacturers" EntityType="Self.Manufacturer" />
+          <EntitySet Name="Models" EntityType="Self.Model" />
+          <EntitySet Name="PartNumbers" EntityType="Self.PartNumber" />
+          <EntitySet Name="Status" EntityType="Self.Status" />
+          <AssociationSet Name="ModelCategoryForeignKey" Association="Self.ModelCategoryForeignKey">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Model" EntitySet="Models" />
+          </AssociationSet>
+          <AssociationSet Name="ModelManufacturerForeignKey" Association="Self.ModelManufacturerForeignKey">
+            <End Role="Manufacturer" EntitySet="Manufacturers" />
+            <End Role="Model" EntitySet="Models" />
+          </AssociationSet>
+          <AssociationSet Name="ModelStatusForeignKey" Association="Self.ModelStatusForeignKey">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="Model" EntitySet="Models" />
+          </AssociationSet>
+          <AssociationSet Name="PartNumberModelForeignKey" Association="Self.PartNumberModelForeignKey">
+            <End Role="Model" EntitySet="Models" />
+            <End Role="PartNumber" EntitySet="PartNumbers" />
+          </AssociationSet>
+          <AssociationSet Name="PartNumberStatusForeignKey" Association="Self.PartNumberStatusForeignKey">
+            <End Role="Status" EntitySet="Status" />
+            <End Role="PartNumber" EntitySet="PartNumbers" />
+          </AssociationSet>
+          <FunctionImport Name="ModelDelete">
+          <Parameter Name="ModelID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ModelInsert">
+            <Parameter Name="ModelId" Mode="InOut" Type="Int32" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="ManufacturerCode" Mode="In" Type="String" />
+            <Parameter Name="CategoryId" Mode="In" Type="Int32" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="Features" Mode="In" Type="String" />
+            <Parameter Name="StatusId" Mode="In" Type="Int32" />
+            <Parameter Name="ManufacturerId" Mode="In" Type="Int32" />
+            <Parameter Name="ListPrice" Mode="In" Type="Decimal" />
+            <Parameter Name="ImageCollection" Mode="In" Type="String" />
+            <Parameter Name="CategoryCustomData" Mode="In" Type="String" />
+            <Parameter Name="ManufacturerCustomData" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ModelSelectByKey" EntitySet="Models" ReturnType="Collection(BikeStoreModel.Model)">
+          <Parameter Name="ModelId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ModelSelectFilter" ReturnType="Collection(BikeStoreModel.ModelSelectFilter_Result)">
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="ManufacturerCode" Mode="In" Type="String" />
+            <Parameter Name="CategoryName" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="Features" Mode="In" Type="String" />
+            <Parameter Name="MinListPrice" Mode="In" Type="Decimal" />
+            <Parameter Name="MaxListPrice" Mode="In" Type="Decimal" />
+            <Parameter Name="StatusName" Mode="In" Type="String" />
+            <Parameter Name="ManufacturerName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="ModelUpdate">
+            <Parameter Name="ModelId" Mode="In" Type="Int32" />
+            <Parameter Name="Name" Mode="In" Type="String" />
+            <Parameter Name="ManufacturerCode" Mode="In" Type="String" />
+            <Parameter Name="CategoryId" Mode="In" Type="Int32" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="Features" Mode="In" Type="String" />
+            <Parameter Name="StatusId" Mode="In" Type="Int32" />
+            <Parameter Name="ManufacturerId" Mode="In" Type="Int32" />
+            <Parameter Name="ListPrice" Mode="In" Type="Decimal" />
+            <Parameter Name="ImageCollection" Mode="In" Type="String" />
+            <Parameter Name="CategoryCustomData" Mode="In" Type="String" />
+            <Parameter Name="ManufacturerCustomData" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PartNumberSelectFilter" ReturnType="Collection(BikeStoreModel.PartNumberSelectFilter_Result)">
+            <Parameter Name="ModelName" Mode="In" Type="String" />
+            <Parameter Name="PartNumberName" Mode="In" Type="String" />
+            <Parameter Name="ManufacturerCode" Mode="In" Type="String" />
+            <Parameter Name="InventoryPartNumber" Mode="In" Type="String" />
+            <Parameter Name="ManufacturerPartNumber" Mode="In" Type="String" />
+            <Parameter Name="CategoryName" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="Features" Mode="In" Type="String" />
+            <Parameter Name="MinListPrice" Mode="In" Type="Decimal" />
+            <Parameter Name="MaxListPrice" Mode="In" Type="Decimal" />
+            <Parameter Name="StatusName" Mode="In" Type="String" />
+            <Parameter Name="ManufacturerName" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_alterdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_creatediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="version" Mode="In" Type="Int32" />
+            <Parameter Name="definition" Mode="In" Type="Binary" />
+          </FunctionImport>
+          <FunctionImport Name="sp_dropdiagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(BikeStoreModel.sp_helpdiagramdefinition_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(BikeStoreModel.sp_helpdiagrams_Result)">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_renamediagram">
+            <Parameter Name="diagramname" Mode="In" Type="String" />
+            <Parameter Name="owner_id" Mode="In" Type="Int32" />
+            <Parameter Name="new_diagramname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="sp_upgraddiagrams" />
+        </EntityContainer>
+        <ComplexType Name="ModelSelectByKey_Result">
+          <Property Type="Int32" Name="ModelId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ManufacturerCode" Nullable="true" MaxLength="25" />
+          <Property Type="Int32" Name="CategoryId" Nullable="true" />
+          <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="String" Name="Features" Nullable="true" />
+          <Property Type="String" Name="StatusName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="StatusId" Nullable="true" />
+          <Property Type="Int32" Name="ManufacturerId" Nullable="true" />
+          <Property Type="String" Name="ManufacturerName" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="ListPrice" Nullable="true" Precision="19" />
+          <Property Type="String" Name="ImageCollection" Nullable="true" />
+          <Property Type="String" Name="CategoryCustomData" Nullable="true" />
+          <Property Type="String" Name="ManufacturerCustomData" Nullable="true" />
+          <Property Type="DateTime" Name="DateModified" Nullable="true" />
+          <Property Type="DateTime" Name="DateCreated" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="ModelSelectFilter_Result">
+          <Property Type="Int32" Name="ModelId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ManufacturerCode" Nullable="true" MaxLength="25" />
+          <Property Type="Int32" Name="CategoryId" Nullable="true" />
+          <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="String" Name="Features" Nullable="true" />
+          <Property Type="String" Name="StatusName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="StatusId" Nullable="true" />
+          <Property Type="Int32" Name="ManufacturerId" Nullable="true" />
+          <Property Type="String" Name="ManufacturerName" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="ListPrice" Nullable="true" Precision="19" />
+          <Property Type="String" Name="ImageCollection" Nullable="true" />
+          <Property Type="String" Name="CategoryCustomData" Nullable="true" />
+          <Property Type="String" Name="ManufacturerCustomData" Nullable="true" />
+          <Property Type="DateTime" Name="DateModified" Nullable="true" />
+          <Property Type="DateTime" Name="DateCreated" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PartNumberSelectFilter_Result">
+          <Property Type="Int32" Name="ModelId" Nullable="false" />
+          <Property Type="String" Name="ModelName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="PartNumberName" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="ManufacturerCode" Nullable="true" MaxLength="25" />
+          <Property Type="Int32" Name="PartNumberId" Nullable="true" />
+          <Property Type="String" Name="InventoryPartNumber" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="ManufacturerPartNumber" Nullable="true" MaxLength="25" />
+          <Property Type="String" Name="InvoiceDescription" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="UPC" Nullable="true" MaxLength="12" />
+          <Property Type="Int32" Name="CategoryId" Nullable="true" />
+          <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="String" Name="Features" Nullable="true" />
+          <Property Type="String" Name="ModelStatusName" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="StatusId" Nullable="true" />
+          <Property Type="Int32" Name="ManufacturerId" Nullable="true" />
+          <Property Type="String" Name="ManufacturerName" Nullable="true" MaxLength="100" />
+          <Property Type="Decimal" Name="ListPrice" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="Cost" Nullable="true" Precision="19" />
+          <Property Type="String" Name="ImageCollection" Nullable="true" />
+          <Property Type="String" Name="CategoryCustomData" Nullable="true" />
+          <Property Type="String" Name="ManufacturerCustomData" Nullable="true" />
+          <Property Type="DateTime" Name="DateModified" Nullable="true" />
+          <Property Type="DateTime" Name="DateCreated" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagramdefinition_Result">
+          <Property Type="Int32" Name="version" Nullable="true" />
+          <Property Type="Binary" Name="definition" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_helpdiagrams_Result">
+          <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+          <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BikeStoreModelStoreContainer" CdmEntityContainer="BikeStoreEntities">
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="BikeStoreModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CustomDataFields" ColumnName="CustomDataFields" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Manufacturers">
+            <EntityTypeMapping TypeName="BikeStoreModel.Manufacturer">
+              <MappingFragment StoreEntitySet="Manufacturer">
+                <ScalarProperty Name="ManufacturerId" ColumnName="ManufacturerId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CustomDataFields" ColumnName="CustomDataFields" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Models">
+            <EntityTypeMapping TypeName="BikeStoreModel.Model">
+              <MappingFragment StoreEntitySet="Model">
+                <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ManufacturerCode" ColumnName="ManufacturerCode" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Features" ColumnName="Features" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="ManufacturerId" ColumnName="ManufacturerId" />
+                <ScalarProperty Name="ListPrice" ColumnName="ListPrice" />
+                <ScalarProperty Name="ImageCollection" ColumnName="ImageCollection" />
+                <ScalarProperty Name="CategoryCustomData" ColumnName="CategoryCustomData" />
+                <ScalarProperty Name="ManufacturerCustomData" ColumnName="ManufacturerCustomData" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+            <EntityTypeMapping TypeName="BikeStoreModel.Model">
+              <ModificationFunctionMapping>
+                <InsertFunction FunctionName="BikeStoreModel.Store.ModelInsert" RowsAffectedParameter="ModelId">
+                  <ScalarProperty Name="ManufacturerCustomData" ParameterName="ManufacturerCustomData" />
+                  <ScalarProperty Name="CategoryCustomData" ParameterName="CategoryCustomData" />
+                  <ScalarProperty Name="ImageCollection" ParameterName="ImageCollection" />
+                  <ScalarProperty Name="ListPrice" ParameterName="ListPrice" />
+                  <ScalarProperty Name="ManufacturerId" ParameterName="ManufacturerId" />
+                  <ScalarProperty Name="StatusId" ParameterName="StatusId" />
+                  <ScalarProperty Name="Features" ParameterName="Features" />
+                  <ScalarProperty Name="Description" ParameterName="Description" />
+                  <ScalarProperty Name="CategoryId" ParameterName="CategoryId" />
+                  <ScalarProperty Name="ManufacturerCode" ParameterName="ManufacturerCode" />
+                  <ScalarProperty Name="Name" ParameterName="Name" />
+                  <ResultBinding Name="ModelId" ColumnName="ModelId" />
+                </InsertFunction>
+                <UpdateFunction FunctionName="BikeStoreModel.Store.ModelUpdate">
+                  <ScalarProperty Name="ManufacturerCustomData" ParameterName="ManufacturerCustomData" Version="Current" />
+                  <ScalarProperty Name="CategoryCustomData" ParameterName="CategoryCustomData" Version="Current" />
+                  <ScalarProperty Name="ImageCollection" ParameterName="ImageCollection" Version="Current" />
+                  <ScalarProperty Name="ListPrice" ParameterName="ListPrice" Version="Current" />
+                  <ScalarProperty Name="ManufacturerId" ParameterName="ManufacturerId" Version="Current" />
+                  <ScalarProperty Name="StatusId" ParameterName="StatusId" Version="Current" />
+                  <ScalarProperty Name="Features" ParameterName="Features" Version="Current" />
+                  <ScalarProperty Name="Description" ParameterName="Description" Version="Current" />
+                  <ScalarProperty Name="CategoryId" ParameterName="CategoryId" Version="Current" />
+                  <ScalarProperty Name="ManufacturerCode" ParameterName="ManufacturerCode" Version="Current" />
+                  <ScalarProperty Name="Name" ParameterName="Name" Version="Current" />
+                  <ScalarProperty Name="ModelId" ParameterName="ModelId" Version="Current" />
+                </UpdateFunction>
+                <DeleteFunction FunctionName="BikeStoreModel.Store.ModelDelete" >
+                  <ScalarProperty Name="ModelId" ParameterName="ModelID" />
+                </DeleteFunction>
+              </ModificationFunctionMapping>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PartNumbers">
+            <EntityTypeMapping TypeName="BikeStoreModel.PartNumber">
+              <MappingFragment StoreEntitySet="PartNumber">
+                <ScalarProperty Name="PartNumberId" ColumnName="PartNumberId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="InvoiceDescription" ColumnName="InvoiceDescription" />
+                <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="InventoryPartNumber" ColumnName="InventoryPartNumber" />
+                <ScalarProperty Name="ManufacturerPartNumber" ColumnName="ManufacturerPartNumber" />
+                <ScalarProperty Name="CategoryCustomData" ColumnName="CategoryCustomData" />
+                <ScalarProperty Name="ManufacturerCustomData" ColumnName="ManufacturerCustomData" />
+                <ScalarProperty Name="ListPrice" ColumnName="ListPrice" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="UPC" ColumnName="UPC" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Status">
+            <EntityTypeMapping TypeName="BikeStoreModel.Status">
+              <MappingFragment StoreEntitySet="Status">
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ModelDelete" FunctionName="BikeStoreModel.Store.ModelDelete" />
+          <FunctionImportMapping FunctionImportName="ModelInsert" FunctionName="BikeStoreModel.Store.ModelInsert" />
+          <FunctionImportMapping FunctionImportName="ModelSelectByKey" FunctionName="BikeStoreModel.Store.ModelSelectByKey">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ModelSelectFilter" FunctionName="BikeStoreModel.Store.ModelSelectFilter">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BikeStoreModel.ModelSelectFilter_Result">
+                <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ManufacturerCode" ColumnName="ManufacturerCode" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Features" ColumnName="Features" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="ManufacturerId" ColumnName="ManufacturerId" />
+                <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
+                <ScalarProperty Name="ListPrice" ColumnName="ListPrice" />
+                <ScalarProperty Name="ImageCollection" ColumnName="ImageCollection" />
+                <ScalarProperty Name="CategoryCustomData" ColumnName="CategoryCustomData" />
+                <ScalarProperty Name="ManufacturerCustomData" ColumnName="ManufacturerCustomData" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ModelUpdate" FunctionName="BikeStoreModel.Store.ModelUpdate" />
+          <FunctionImportMapping FunctionImportName="PartNumberSelectFilter" FunctionName="BikeStoreModel.Store.PartNumberSelectFilter">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BikeStoreModel.PartNumberSelectFilter_Result">
+                <ScalarProperty Name="ModelId" ColumnName="ModelId" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="PartNumberName" ColumnName="PartNumberName" />
+                <ScalarProperty Name="ManufacturerCode" ColumnName="ManufacturerCode" />
+                <ScalarProperty Name="PartNumberId" ColumnName="PartNumberId" />
+                <ScalarProperty Name="InventoryPartNumber" ColumnName="InventoryPartNumber" />
+                <ScalarProperty Name="ManufacturerPartNumber" ColumnName="ManufacturerPartNumber" />
+                <ScalarProperty Name="InvoiceDescription" ColumnName="InvoiceDescription" />
+                <ScalarProperty Name="UPC" ColumnName="UPC" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Features" ColumnName="Features" />
+                <ScalarProperty Name="ModelStatusName" ColumnName="ModelStatusName" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="ManufacturerId" ColumnName="ManufacturerId" />
+                <ScalarProperty Name="ManufacturerName" ColumnName="ManufacturerName" />
+                <ScalarProperty Name="ListPrice" ColumnName="ListPrice" />
+                <ScalarProperty Name="Cost" ColumnName="Cost" />
+                <ScalarProperty Name="ImageCollection" ColumnName="ImageCollection" />
+                <ScalarProperty Name="CategoryCustomData" ColumnName="CategoryCustomData" />
+                <ScalarProperty Name="ManufacturerCustomData" ColumnName="ManufacturerCustomData" />
+                <ScalarProperty Name="DateModified" ColumnName="DateModified" />
+                <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="BikeStoreModel.Store.sp_alterdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="BikeStoreModel.Store.sp_creatediagram" />
+          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="BikeStoreModel.Store.sp_dropdiagram" />
+          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="BikeStoreModel.Store.sp_helpdiagramdefinition">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BikeStoreModel.sp_helpdiagramdefinition_Result">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="BikeStoreModel.Store.sp_helpdiagrams">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="BikeStoreModel.sp_helpdiagrams_Result">
+                <ScalarProperty Name="Database" ColumnName="Database" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Owner" ColumnName="Owner" />
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="BikeStoreModel.Store.sp_renamediagram" />
+          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="BikeStoreModel.Store.sp_upgraddiagrams" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
